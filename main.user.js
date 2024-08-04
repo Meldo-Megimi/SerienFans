@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SF/FF Genre sort
 // @namespace    https://github.com/Meldo-Megimi/SerienFans/raw/master/main.user.js
-// @version      2024-08-03.02
+// @version      2024-08-04.01
 // @description  Sort genre for SerienFans and FilmFans by year of release
 // @author       Meldo-Megimi
 // @match        https://serienfans.org/genre*
@@ -58,6 +58,15 @@ span.sortOption {
 
 span.sortOption.active {
   transform: rotate(180deg);
+}
+
+#listLeft a, #listRight a {
+	background-color: rgba(25,25,25,0.5);
+	width: 100%;
+}
+
+#listLeft a:nth-child(2n+1), #listRight a:nth-child(2n+1) {
+	background-color: rgba(0,0,0,0.5);
 }
 `
 
