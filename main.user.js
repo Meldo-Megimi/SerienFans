@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SF/FF Genre sort
 // @namespace    https://github.com/Meldo-Megimi/SerienFans/raw/master/main.user.js
-// @version      2024-08-04.01
+// @version      2024-08-05.01
 // @description  Sort genre for SerienFans and FilmFans by year of release
 // @author       Meldo-Megimi
 // @match        https://serienfans.org/genre*
@@ -19,11 +19,16 @@ const stylesheet = `
   margin: 5pt;
 }
 
+a.hidden {
+  display: none !important;
+}
+
 ul.sorting {
 	padding: 0;
 	margin-bottom: 10px;
 	display: flex;
 	flex-wrap: wrap;
+  min-width: fit-content;
 	max-height: 50px;
 	overflow: hidden;
 	gap: 12px;
@@ -61,12 +66,7 @@ span.sortOption.active {
 }
 
 #listLeft a, #listRight a {
-	background-color: rgba(25,25,25,0.5);
 	width: 100%;
-}
-
-#listLeft a:nth-child(2n+1), #listRight a:nth-child(2n+1) {
-	background-color: rgba(0,0,0,0.5);
 }
 `
 
@@ -138,6 +138,23 @@ const sortList = (observer) => {
   });
 
   observer.observe(document.getElementById("listLeft"), { attributes: false, childList: true, subtree: false });
+  filterList(document.getElementById("filterButton").value);
+}
+
+const filterList = (filter) => {
+  document.querySelectorAll("div .list a").forEach((row) => {
+    if (row.innerText.toLowerCase().includes(filter.toLowerCase())) {
+      row.classList.remove("hidden");
+    } else {
+      row.classList.add("hidden");
+    }
+  });
+  applyStripes();
+}
+
+const applyStripes = () => {
+  $("div .list a:not(.hidden)").filter(":odd").css({ 'background-color': 'rgba(25,25,25,0.5)' });
+  $("div .list a:not(.hidden)").filter(":even").css({ 'background-color': 'rgba(0,0,0,0.5)' });
 }
 
 const addSortButtons = () => {
@@ -148,6 +165,8 @@ const addSortButtons = () => {
         <li class="sortOption active" data-id="year">Jahr<span class="sortOption">&#x25BC;</span></li>
         <li class="sortOption" data-id="titel">Titel<span class="sortOption active">&#x25BC;</span></li>
      </ul>
+     <span>Filter:</span>
+     <input id="filterButton" type="text"></input>
   </div>`);
 
   document.querySelectorAll("li.sortOption").forEach((button) => {
@@ -171,6 +190,12 @@ const addSortButtons = () => {
   });
 }
 
+const addFilterEvent = () => {
+  document.getElementById("filterButton").addEventListener("input", function (e) {
+    filterList(document.getElementById("filterButton").value);
+  }, false);
+}
+
 const leftColumnObserver = new MutationObserver((mutationList, observer) => {
   sortList(observer);
 });
@@ -179,3 +204,4 @@ leftColumnObserver.observe(document.getElementById("listLeft"), { attributes: fa
 
 injectStylesheet();
 addSortButtons();
+addFilterEvent();
