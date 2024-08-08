@@ -1,6 +1,8 @@
 # Sortieren von Genres bei SerienFans und FilmFans
 
-Sortieren der Genres Einträge nach Erscheinungsjahr
+![Sample image](sample.png)
+
+Erweitert die Genres von SerienFans und FilmFans um die möglichkeit nach Jahr oder Titel zu sortieren und nach Titel zu filtern
 
 ## Installation
 
